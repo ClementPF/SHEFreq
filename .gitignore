@@ -1,0 +1,7 @@
+
+Pods/*
+*.xcuserstate
+
+SHEFreq.xcodeproj/xcuserdata/*
+
+SHEFreq.xcworkspace/xcuserdata/*
