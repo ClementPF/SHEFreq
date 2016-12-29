@@ -74,7 +74,16 @@ class DetailViewController: UIViewController {
         Alamofire.request(url).validate().responseJSON { response in
             switch response.result {
             case .success:
-                print("Validation Successful")
+                
+                let red   = Float((arc4random() % 256)) / 255.0
+                let green = Float((arc4random() % 256)) / 255.0
+                let blue  = Float((arc4random() % 256)) / 255.0
+                let alpha = Float(1.0)
+                
+                UIView.animate(withDuration: 1.0, delay: 0.0, options:[.repeat, .autoreverse], animations: {
+                    self.view.backgroundColor = UIColor(colorLiteralRed: 0, green: 1, blue: 0, alpha: alpha)
+                }, completion:nil)
+                
             case .failure(let error):
                 print(error)
             }
