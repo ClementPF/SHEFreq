@@ -34,6 +34,10 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+        
+        if(objects.count == 0){
+            initList()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,11 +49,50 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         
         let context = self.fetchedResultsController.managedObjectContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Environment")
+        
+        let sortDescriptor = NSSortDescriptor(key: "dateCreated", ascending: false)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
         do {
             let results = try context.fetch(fetchRequest)
             objects = results as! [Environment]
+            
+            
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    func initList() {
+        
+        let context = self.fetchedResultsController.managedObjectContext
+        let entity =  NSEntityDescription.entity(forEntityName: "Environment", in:context)
+        let environment = NSManagedObject(entity: entity!, insertInto: context)
+        
+        environment.setValue("DTV remote server", forKey: kName)
+        environment.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
+        environment.setValue("http://dev-freq-demo.freq.us:4007/", forKey: kServerIP)
+        environment.setValue("apps/freq/minidock.html", forKey: kAppUrl)
+        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
+        environment.setValue(NSDate(), forKey: kDateCreated)
+        
+        let environment2 = NSManagedObject(entity: entity!, insertInto: context)
+        
+        environment2.setValue("DTV local server", forKey: kName)
+        environment2.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
+        environment2.setValue("http://192.168.1.1:4005/", forKey: kServerIP)
+        environment2.setValue("apps/freq/minidock.html", forKey: kAppUrl)
+        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
+        environment2.setValue(NSDate(), forKey: kDateCreated)
+        
+        do {
+            try context.save()
+            objects.append(environment as! Environment)
+            objects.append(environment2 as! Environment)
+            objects.sort(by: {($0 as! Environment).dateCreated!.timeIntervalSince1970 > ($1 as! Environment).dateCreated!.timeIntervalSince1970})
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
         }
     }
 
@@ -59,14 +102,17 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         let entity =  NSEntityDescription.entity(forEntityName: "Environment", in:context)
         let environment = NSManagedObject(entity: entity!, insertInto: context)
         
-        environment.setValue("Default Configuration", forKey: kName)
-        environment.setValue("http://192.168.1.97:8080/", forKey: kStbIP)
-        environment.setValue("http://192.168.1.82:4005/", forKey: kServerIP)
+        environment.setValue("New Configuration", forKey: kName)
+        environment.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
+        environment.setValue("http://dev-freq-demo.freq.us:4007/", forKey: kServerIP)
         environment.setValue("apps/freq/minidock.html", forKey: kAppUrl)
+        environment.setValue("a1:b2:c3:d4:e5", forKey: kAppUrl)
+        environment.setValue(NSDate(), forKey: kDateCreated)
         
         do {
             try context.save()
             objects.append(environment as! Environment)
+            objects.sort(by: {($0 as! Environment).dateCreated!.timeIntervalSince1970 > ($1 as! Environment).dateCreated!.timeIntervalSince1970})
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
@@ -130,6 +176,11 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
     
     func configureCell(_ cell: UITableViewCell, withEvent environment: Environment) {
         cell.textLabel!.text = environment.name!.description
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd hh:mm"
+        let s = dateFormatter.string(from: environment.dateCreated as! Date)
+        cell.detailTextLabel!.text = s
     }
 
     
@@ -146,7 +197,7 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dateCreated", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
