@@ -83,7 +83,7 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         environment2.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
         environment2.setValue("http://192.168.1.1:4005/", forKey: kServerIP)
         environment2.setValue("apps/freq/minidock.html", forKey: kAppUrl)
-        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
+        environment2.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
         environment2.setValue(NSDate(), forKey: kDateCreated)
         
         do {
@@ -106,7 +106,7 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         environment.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
         environment.setValue("http://dev-freq-demo.freq.us:4007/", forKey: kServerIP)
         environment.setValue("apps/freq/minidock.html", forKey: kAppUrl)
-        environment.setValue("a1:b2:c3:d4:e5", forKey: kAppUrl)
+        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
         environment.setValue(NSDate(), forKey: kDateCreated)
         
         do {
