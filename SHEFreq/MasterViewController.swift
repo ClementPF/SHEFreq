@@ -11,7 +11,7 @@ import CoreData
 import Foundation
 
 class MasterViewController: UITableViewController , NSFetchedResultsControllerDelegate{
-
+    
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     var objects = [Any]()
@@ -20,17 +20,16 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-    
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        self.navigationItem.rightBarButtonItem = addButton
+        
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
         
         restore()
+        refresh(self)
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
@@ -39,7 +38,7 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
             initList()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -48,85 +47,63 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
     func restore(){
         
         let context = self.fetchedResultsController.managedObjectContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Environment")
-        
-        let sortDescriptor = NSSortDescriptor(key: "dateCreated", ascending: false)
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Session")
         
         do {
             let results = try context.fetch(fetchRequest)
-            objects = results as! [Environment]
-            
-            
+            objects = results as! [Session]
+            objects.sort(by: {($0 as! Session).dateCreated!.timeIntervalSince1970 > ($1 as! Session).dateCreated!.timeIntervalSince1970})
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
     
     func initList() {
+        for envValue in defaultEnvironments{
+            createDefaultSessionForEnvironment(env: envValue)
+        }
+    }
+    
+    @IBAction func insertNew(_ sender: Any) {
+        createDefaultSessionForEnvironment(env: defaultNewEnvironment)
+    }
+    
+    func createDefaultSessionForEnvironment(env : [String : String]){
         
         let context = self.fetchedResultsController.managedObjectContext
         let entity =  NSEntityDescription.entity(forEntityName: "Environment", in:context)
+        let sessionEntity =  NSEntityDescription.entity(forEntityName: "Session", in:context)
         let environment = NSManagedObject(entity: entity!, insertInto: context)
+        let session = NSManagedObject(entity: sessionEntity!, insertInto: context)
         
-        environment.setValue("DTV remote server", forKey: kName)
-        environment.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
-        environment.setValue("http://dev-freq-demo.freq.us:4007/", forKey: kServerIP)
-        environment.setValue("apps/freq/minidock.html", forKey: kAppUrl)
-        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
-        environment.setValue(NSDate(), forKey: kDateCreated)
+        for (key, value) in env{
+            environment.setValue(value, forKey: key)
+        }
         
-        let environment2 = NSManagedObject(entity: entity!, insertInto: context)
-        
-        environment2.setValue("DTV local server", forKey: kName)
-        environment2.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
-        environment2.setValue("http://192.168.1.1:4005/", forKey: kServerIP)
-        environment2.setValue("apps/freq/minidock.html", forKey: kAppUrl)
-        environment2.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
-        environment2.setValue(NSDate(), forKey: kDateCreated)
+        session.setValue(environment, forKey: kTarget)
+        session.setValue(false, forKey: kIsGenie)
+        session.setValue("unknown", forKey: kStatus)
+        session.setValue(-1, forKey: kMemoryUsage)
+        session.setValue(NSDate(), forKey: kDateCreated)
         
         do {
             try context.save()
-            objects.append(environment as! Environment)
-            objects.append(environment2 as! Environment)
-            objects.sort(by: {($0 as! Environment).dateCreated!.timeIntervalSince1970 > ($1 as! Environment).dateCreated!.timeIntervalSince1970})
+            objects.append(session as! Session)
+            objects.sort(by: {($0 as! Session).dateCreated!.timeIntervalSince1970 > ($1 as! Session).dateCreated!.timeIntervalSince1970})
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
     }
-
-    func insertNewObject(_ sender: Any) {
-        
-        let context = self.fetchedResultsController.managedObjectContext
-        let entity =  NSEntityDescription.entity(forEntityName: "Environment", in:context)
-        let environment = NSManagedObject(entity: entity!, insertInto: context)
-        
-        environment.setValue("New Configuration", forKey: kName)
-        environment.setValue("http://192.168.1.1:8080/", forKey: kStbIP)
-        environment.setValue("http://dev-freq-demo.freq.us:4007/", forKey: kServerIP)
-        environment.setValue("apps/freq/minidock.html", forKey: kAppUrl)
-        environment.setValue("a1:b2:c3:d4:e5", forKey: kMiniGenieAddr)
-        environment.setValue(NSDate(), forKey: kDateCreated)
-        
-        do {
-            try context.save()
-            objects.append(environment as! Environment)
-            objects.sort(by: {($0 as! Environment).dateCreated!.timeIntervalSince1970 > ($1 as! Environment).dateCreated!.timeIntervalSince1970})
-        } catch let error as NSError  {
-            print("Could not save \(error), \(error.userInfo)")
-        }
-    }
-
+    
     // MARK: - Segues
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! Environment
+                let object = objects[indexPath.row] as! Session
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 
-                controller.environment = object
+                controller.session = object
                 controller.managedObjectContext = managedObjectContext
                 
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
@@ -174,30 +151,28 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         }
     }
     
-    func configureCell(_ cell: UITableViewCell, withEvent environment: Environment) {
-        cell.textLabel!.text = environment.name!.description
+    func configureCell(_ cell: UITableViewCell, withEvent session: Session) {
+        cell.textLabel!.text = session.target?.name!.description
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd hh:mm"
-        let s = dateFormatter.string(from: environment.dateCreated as! Date)
-        cell.detailTextLabel!.text = s
+        cell.detailTextLabel!.text = session.status
+        
     }
-
+    
     
     // MARK: - Fetched results controller
     
-    var fetchedResultsController: NSFetchedResultsController<Environment> {
+    var fetchedResultsController: NSFetchedResultsController<Session> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
         
-        let fetchRequest: NSFetchRequest<Environment> = Environment.fetchRequest()
+        let fetchRequest: NSFetchRequest<Session> = Session.fetchRequest()
         
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "dateCreated", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: kDateCreated, ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -218,7 +193,21 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         
         return _fetchedResultsController!
     }
-    var _fetchedResultsController: NSFetchedResultsController<Environment>? = nil
+    
+    @IBAction func refresh(_ sender: Any) {
+        for session in objects {
+            SHEF.ping(environment: (session as! Session).target!,
+                      miniGenieMacAddress: "",
+                      success: {_ in
+                        (session as! Session).status = kStatusAvailable
+            },
+                      failure: {(error : NSError) -> () in
+                        (session as! Session).status = kStatusUnavailable
+            })
+        }
+    }
+    
+    var _fetchedResultsController: NSFetchedResultsController<Session>? = nil
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
@@ -242,7 +231,7 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            self.configureCell(tableView.cellForRow(at: indexPath!)!, withEvent: anObject as! Environment)
+            self.configureCell(tableView.cellForRow(at: indexPath!)!, withEvent: anObject as! Session)
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
@@ -260,6 +249,6 @@ class MasterViewController: UITableViewController , NSFetchedResultsControllerDe
      self.tableView.reloadData()
      }
      */
-
+    
 }
 

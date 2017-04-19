@@ -6,15 +6,22 @@
     </entity>
     <entity name="Environment" representedClassName="Environment" syncable="YES" codeGenerationType="class">
         <attribute name="appUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="miniGenieAddr" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverIP" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stbIP" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" syncable="YES"/>
     </entity>
+    <entity name="Session" representedClassName="Session" syncable="YES" codeGenerationType="class">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isMiniGenie" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="memory" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="target" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Environment" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Action" positionX="-54" positionY="18" width="128" height="75"/>
-        <element name="Environment" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="Environment" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Session" positionX="-54" positionY="45" width="128" height="120"/>
     </elements>
 </model>

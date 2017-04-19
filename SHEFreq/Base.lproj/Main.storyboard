@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -38,7 +39,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPy-vM-Vqj">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPy-vM-Vqj">
                                 <rect key="frame" x="8" y="64" width="359" height="503"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r9p-DR-Iw0">
@@ -103,17 +104,17 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VJq-4C-CIg">
-                                        <rect key="frame" x="8" y="272" width="343" height="80"/>
+                                        <rect key="frame" x="8" y="272" width="343" height="120"/>
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="default" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sG8-BO-NDo">
-                                                <rect key="frame" x="0.0" y="42" width="88" height="21"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" showsHorizontalScrollIndicator="NO" text="default" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="l81-xV-c6F">
+                                                <rect key="frame" x="0.0" y="30" width="335" height="86"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL" returnKeyType="done"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL" returnKeyType="next"/>
                                                 <connections>
-                                                    <outlet property="delegate" destination="JEX-9P-axG" id="wm4-Ic-Lww"/>
+                                                    <outlet property="delegate" destination="JEX-9P-axG" id="wqq-ap-nFo"/>
                                                 </connections>
-                                            </textField>
+                                            </textView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="APP URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6kB-2k-tc2">
                                                 <rect key="frame" x="0.0" y="0.0" width="88" height="26"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
@@ -123,12 +124,13 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="6kB-2k-tc2" firstAttribute="trailing" secondItem="sG8-BO-NDo" secondAttribute="trailing" id="5lP-Lc-ThJ"/>
+                                            <constraint firstAttribute="bottom" secondItem="l81-xV-c6F" secondAttribute="bottom" constant="4" id="Bgm-Uv-IXB"/>
                                             <constraint firstItem="6kB-2k-tc2" firstAttribute="leading" secondItem="VJq-4C-CIg" secondAttribute="leading" id="J02-Fs-uZv"/>
-                                            <constraint firstAttribute="height" constant="80" id="cUX-vx-oDs"/>
-                                            <constraint firstItem="sG8-BO-NDo" firstAttribute="top" secondItem="6kB-2k-tc2" secondAttribute="bottom" constant="16" id="fh9-5c-sTH"/>
+                                            <constraint firstItem="l81-xV-c6F" firstAttribute="top" secondItem="6kB-2k-tc2" secondAttribute="bottom" constant="4" id="Ked-FF-8hb"/>
+                                            <constraint firstItem="l81-xV-c6F" firstAttribute="leading" secondItem="VJq-4C-CIg" secondAttribute="leading" id="OpV-Fj-tBa"/>
+                                            <constraint firstAttribute="height" constant="120" id="cUX-vx-oDs"/>
                                             <constraint firstItem="6kB-2k-tc2" firstAttribute="top" secondItem="VJq-4C-CIg" secondAttribute="top" id="h68-3f-h2K"/>
-                                            <constraint firstItem="6kB-2k-tc2" firstAttribute="leading" secondItem="sG8-BO-NDo" secondAttribute="leading" id="vNg-RJ-z3P"/>
+                                            <constraint firstAttribute="trailing" secondItem="l81-xV-c6F" secondAttribute="trailing" constant="8" id="hUO-CS-iqE"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5kM-G7-iET">
@@ -162,7 +164,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kdh-QK-3n0">
-                                        <rect key="frame" x="8" y="359" width="343" height="80"/>
+                                        <rect key="frame" x="8" y="399" width="343" height="80"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="default" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DJK-HK-eSB">
                                                 <rect key="frame" x="0.0" y="42" width="269" height="21"/>
@@ -212,7 +214,6 @@
                                     <constraint firstItem="kdh-QK-3n0" firstAttribute="top" secondItem="VJq-4C-CIg" secondAttribute="bottom" constant="7" id="bPs-YM-9f0"/>
                                     <constraint firstItem="VJq-4C-CIg" firstAttribute="top" secondItem="5kM-G7-iET" secondAttribute="bottom" constant="8" symbolic="YES" id="g7X-ZL-Usv"/>
                                     <constraint firstItem="5kM-G7-iET" firstAttribute="leading" secondItem="VJq-4C-CIg" secondAttribute="leading" id="ipW-Le-O4h"/>
-                                    <constraint firstAttribute="bottom" secondItem="kdh-QK-3n0" secondAttribute="bottom" constant="59" id="pXa-Hc-UFI"/>
                                     <constraint firstItem="VJq-4C-CIg" firstAttribute="leading" secondItem="kdh-QK-3n0" secondAttribute="leading" id="q0L-zK-8q8"/>
                                 </constraints>
                             </scrollView>
@@ -297,7 +298,8 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="ENVIRONMENT" id="mOI-FS-AaM"/>
                     <connections>
-                        <outlet property="appUrlTextField" destination="sG8-BO-NDo" id="pVz-GC-PRo"/>
+                        <outlet property="appUrlTextView" destination="l81-xV-c6F" id="vtm-dX-KGt"/>
+                        <outlet property="appUrlView" destination="VJq-4C-CIg" id="cCv-fh-JLu"/>
                         <outlet property="memoryUsageLabel" destination="BEM-a2-4WH" id="sot-g3-4U0"/>
                         <outlet property="memoryUsageProgressView" destination="4uh-Me-zcY" id="TEg-DG-m0f"/>
                         <outlet property="miniGenieAddr" destination="DJK-HK-eSB" id="cue-ah-l44"/>
@@ -369,7 +371,20 @@
                             <outlet property="delegate" destination="7bK-jq-Zjz" id="RA6-mI-bju"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="SHEFreq" id="Zdf-7t-Un8"/>
+                    <navigationItem key="navigationItem" title="SHEFreq" id="Zdf-7t-Un8">
+                        <rightBarButtonItems>
+                            <barButtonItem style="done" systemItem="add" id="mFK-Q9-6fo">
+                                <connections>
+                                    <action selector="insertNew:" destination="7bK-jq-Zjz" id="Me3-3A-AEV"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="2Mh-3Z-48A">
+                                <connections>
+                                    <action selector="refresh:" destination="7bK-jq-Zjz" id="qar-uF-5vD"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>
@@ -393,7 +408,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Tll-UG-LXB"/>
+        <segue reference="6S0-TO-JiA"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.1299999952" green="0.1299999952" blue="0.1299999952" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

@@ -10,9 +10,11 @@ import UIKit
 import CoreData
 import Alamofire
 
-class DetailViewController: UIViewController, UITextFieldDelegate {
-
-    @IBOutlet var appUrlTextField: UITextField!
+class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+    
+    //@IBOutlet var appUrlTextField: UITextField!
+    @IBOutlet var appUrlTextView: UITextView!
+    @IBOutlet var appUrlView: UIView!
     @IBOutlet var serverIPTextField: UITextField!
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var stbIPTextField: UITextField!
@@ -27,18 +29,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     var memoryInit : Int = -1
     
     var managedObjectContext: NSManagedObjectContext? = nil
-
-
-    var environment: Environment? {
+    
+    var session: Session? {
         didSet {
             self.configureView()
         }
     }
     
+    var environment: Environment? {
+        return self.session?.target
+    }
+    
     func configureView() {
         // Update the user interface for the detail item.
         if let environment = self.environment {
-            if let label = self.appUrlTextField {
+            if let label = self.appUrlTextView {
                 label.text = environment.appUrl
             }
             if let label = self.serverIPTextField {
@@ -54,30 +59,49 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                 label.text = environment.miniGenieAddr
             }
         }
+        if let session = self.session{
+            if(session.status == kStatusStarted){
+                successBackground()
+                startTimer()
+            }
+            else if(session.status == kStatusUnavailable){
+                failureBackground()
+            }else{
+                defaultBackground()
+            }
+            
+            if let switchMG = self.miniGenieSwitch{
+                switchMG.setOn(session.isMiniGenie, animated: false)
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureView()
         
-        appUrlTextField.delegate = self
+        //appUrlTextField.delegate = self
         serverIPTextField.delegate = self
         nameTextField.delegate = self
         stbIPTextField.delegate = self
         miniGenieAddr.delegate = self
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     func persistChanges() {
-        environment?.appUrl = appUrlTextField.text
+        environment?.appUrl = appUrlTextView.text
         environment?.serverIP = serverIPTextField.text
         environment?.name = nameTextField.text
         environment?.stbIP = stbIPTextField.text
+        environment?.miniGenieAddr = miniGenieAddr.text
+        
+        session?.isMiniGenie = miniGenieSwitch.isOn
+        
         do {
             try managedObjectContext?.save()
         } catch let error as NSError  {
@@ -89,52 +113,30 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         persistChanges()
         startPulse()
         
-        var url = String(format: "%@itv/startURL?url=%@%@", (environment?.stbIP!)!, (environment?.serverIP!)!, (environment?.appUrl!)!)
-        
-        if(miniGenieSwitch.isOn){
-            var macAdrr = (environment?.miniGenieAddr!)!
-            macAdrr = macAdrr.uppercased()
-            
-            url = String(format: "%@?&clientAddr=%@", url, (environment?.miniGenieAddr!)! )
-        }
-        
-        Alamofire.request(url).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                self.successBackground()
-                self.getMemoryUsage()
-                self.startTimer()
-            case .failure(let error):
-                print(error)
-                self.failureBackground()
-                self.stopTimer()
-            }
-        }
-    }
-    
-    @IBAction func testClicked(_ sender: Any) {
-        persistChanges()
-        
-        let url = String(format: "%@itv/getLogs", (environment?.stbIP)!)
-        
-        Alamofire.request(url, method: .get, encoding: JSONEncoding.default).validate().responseString
-            { response in
-                if let status = response.response?.statusCode {
-                    switch(status){
-                    case 200:
-                        print("getLogs success")
-                        print(response)
-                    default:
-                        print("error with response status: \(status)")
-                    }
-                }
-                //to get JSON return value
-                if let result = response.result.value {
-                    let JSON = result as! String
-                    self.parseMemoryResponse(body: JSON)
-                    print(JSON)
-                }
-        }
+        SHEF.stop(environment: environment!,
+                  miniGenieMacAddress: miniGenieSwitch.isOn ? (environment?.miniGenieAddr!)! : "",
+                  success: {_ in
+                    
+                    SHEF.start(environment: self.environment!,
+                               miniGenieMacAddress: self.miniGenieSwitch.isOn ? (self.environment?.miniGenieAddr!)! : "",
+                               success: {_ in
+                                self.session?.status = kStatusStarted
+                                self.successBackground()
+                                self.getMemoryUsage()
+                                self.startTimer()
+                    },
+                               failure: {(error : NSError) -> () in
+                                print(error)
+                                self.session?.status = kStatusUnavailable
+                                self.failureBackground()
+                                self.stopTimer()
+                    })
+        },
+                  failure: {(error : NSError) -> () in
+                    print(error)
+                    self.session?.status = kStatusUnavailable
+                    self.failureBackground()
+        })
     }
     
     @IBAction func stopClicked(_ sender: Any) {
@@ -142,57 +144,38 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         startPulse()
         
         self.stopTimer()
-        memoryInit = -1
         
         memoryUsageLabel.text = "NA"
         memoryUsageProgressView.setProgress(0, animated: true)
         
-        var url = String(format: "%@itv/stopITV", (environment?.stbIP)!)
-        
-        if(miniGenieSwitch.isOn){
-            var macAdrr = (environment?.miniGenieAddr!)!
-            macAdrr = macAdrr.uppercased()
-            
-            url = String(format: "%@?&clientAddr=%@", url, (environment?.miniGenieAddr!)! )
-        }
-        
-        Alamofire.request(url).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                print("stopITV Successful")
-                self.defaultBackground()
-            case .failure(let error):
-                print(error)
-                self.failureBackground()
-            }
-        }
+        SHEF.stop(environment: environment!,
+                  miniGenieMacAddress: miniGenieSwitch.isOn ? (environment?.miniGenieAddr!)! : "",
+                  success: {_ in
+                    self.session?.status = kStatusAvailable
+                    self.defaultBackground()
+        },
+                  failure: {(error : NSError) -> () in
+                    print(error)
+                    self.session?.status = kStatusUnavailable
+                    self.failureBackground()
+        })
     }
     
     func getMemoryUsage(){
         
-        let url = String(format: "%@itv/getLogs", (environment?.stbIP)!)
-        
-        Alamofire.request(url, method: .get, encoding: JSONEncoding.default).validate().responseString
-            { response in
-                if let status = response.response?.statusCode {
-                    switch(status){
-                    case 200:
-                        print("getLogs success")
-                    default:
-                        print("error with response status: \(status)")
-                    }
-                }
-                //to get JSON return value
-                if let result = response.result.value {
-                    let JSON = result as! String
-                    self.parseMemoryResponse(body: JSON)
-                    print(JSON)
-                }
-        }
+        SHEF.getMemoryUsage(environment: environment!,
+                            miniGenieMacAddress: miniGenieSwitch.isOn ? (environment?.miniGenieAddr!)! : "",
+                            success: {(mem : Int) -> () in
+                                self.updateMemoryText(memoryUsage: mem)
+        },
+                            failure: {(error : NSError) -> () in
+                                print(error)
+        })
     }
     
     func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+        stopTimer()
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             self?.getMemoryUsage()
         }
     }
@@ -201,42 +184,14 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         timer?.invalidate()
     }
     
-    func parseMemoryResponse(body: String){
+    func updateMemoryText(memoryUsage: Int){
         
-        let text = body
-        
-        if(text.range(of: "RAM memory: ") == nil){
-            return
-        }
-        
-        if(memoryInit < 0){
-            let index1B = text.distance(from: text.startIndex, to: (text.range(of: "RAM memory: ")?.upperBound)!)
-            let index1E = text.distance(from: text.startIndex, to: (text.range(of: " Bytes \n")?.lowerBound)!)
-            
-            let start = text.index(text.startIndex, offsetBy: index1B)
-            let end = text.index(text.startIndex, offsetBy: index1E)
-            
-            let range1 = start..<end
-            
-            let t = text.substring(with: range1)
-            memoryInit = Int(text.substring(with: range1))!
-        }
-        
-        let index2B = text.distance(from: text.startIndex, to: (text.range(of: "RAM memory: ", options: String.CompareOptions.backwards)?.upperBound)!)
-        let index2E = text.distance(from: text.startIndex, to: (text.range(of: " Bytes \n", options: String.CompareOptions.backwards)?.lowerBound)!)
-        
-        let start = text.index(text.startIndex, offsetBy: index2B)
-        let end = text.index(text.startIndex, offsetBy: index2E)
-        let range2 = start..<end
-        
-        let currentMemory = Int(text.substring(with: range2))
+        let currentMemory = memoryUsage
         
         let availableMem = 18000000
         
-        let memoryUsage = (currentMemory! - memoryInit);
-        
-        memoryUsageLabel.text = String(currentMemory!/1000) + " kb"
-        memoryUsageProgressView.setProgress(Float(currentMemory!) / Float(availableMem * 3/3), animated: true)
+        memoryUsageLabel.text = String(describing: currentMemory/1000) + " kb"
+        memoryUsageProgressView.setProgress(Float(currentMemory) / Float(availableMem * 3/3), animated: true)
         
     }
     
@@ -270,6 +225,26 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
         self.persistChanges()
         return false
+    }
+    
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if(text == "\n")
+        {
+            textView.resignFirstResponder()
+            self.view.endEditing(true)
+            self.persistChanges()
+            return false;
+        }
+        
+        return true;
+    }
+
+    
+    
+    func textViewDidChange(_ textView: UITextView){
+        //textView.sizeToFit()
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29159EEB1E524A8300A2EF59 /* SHEF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29159EEA1E524A8300A2EF59 /* SHEF.swift */; };
 		291D5F561E14479300A12E87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D5F551E14479300A12E87 /* AppDelegate.swift */; };
 		291D5F581E14479300A12E87 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D5F571E14479300A12E87 /* MasterViewController.swift */; };
 		291D5F5A1E14479300A12E87 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D5F591E14479300A12E87 /* DetailViewController.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		08F6B4A4984D3DF7DB83FEC7 /* Pods-SHEFreq.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SHEFreq.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SHEFreq/Pods-SHEFreq.debug.xcconfig"; sourceTree = "<group>"; };
 		17010933BCF61ADC869E5B40 /* Pods-SHEFreq.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SHEFreq.release.xcconfig"; path = "Pods/Target Support Files/Pods-SHEFreq/Pods-SHEFreq.release.xcconfig"; sourceTree = "<group>"; };
+		29159EEA1E524A8300A2EF59 /* SHEF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHEF.swift; sourceTree = "<group>"; };
 		291D5F521E14479300A12E87 /* SHEFreq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SHEFreq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		291D5F551E14479300A12E87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		291D5F571E14479300A12E87 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				291D5F8B1E144D1700A12E87 /* Constants.swift */,
 				291D5F881E144C9A00A12E87 /* dataModel */,
 				291D5F551E14479300A12E87 /* AppDelegate.swift */,
+				29159EEA1E524A8300A2EF59 /* SHEF.swift */,
 				291D5F571E14479300A12E87 /* MasterViewController.swift */,
 				291D5F591E14479300A12E87 /* DetailViewController.swift */,
 				291D5F5B1E14479300A12E87 /* Main.storyboard */,
@@ -357,6 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				291D5F5A1E14479300A12E87 /* DetailViewController.swift in Sources */,
+				29159EEB1E524A8300A2EF59 /* SHEF.swift in Sources */,
 				291D5F581E14479300A12E87 /* MasterViewController.swift in Sources */,
 				291D5F561E14479300A12E87 /* AppDelegate.swift in Sources */,
 				291D5F871E144AD400A12E87 /* SHEFreq.xcdatamodeld in Sources */,
