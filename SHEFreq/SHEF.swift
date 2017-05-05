@@ -38,6 +38,33 @@ class SHEF{
         }
     }
     
+    static func clear(environment : Environment,
+                      miniGenieMacAddress : String,
+                      success succeed: (() -> ())? = nil,
+                      failure fail : ((NSError) -> ())? = nil){
+        
+        let appPath = (defaultClearSessionUrl).addingPercentEncoding(withAllowedCharacters: .nonBaseCharacters)
+        
+        var url = String(format: "%@itv/startURL?url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!)
+        
+        if(miniGenieMacAddress.characters.count > 0){
+            var macAdrr = miniGenieMacAddress
+            macAdrr = macAdrr.uppercased()
+            macAdrr = macAdrr.replacingOccurrences(of: ":", with: "", options: NSString.CompareOptions.literal, range:nil)
+            url = String(format: "%@?&clientAddr=%@", url, macAdrr )
+        }
+        
+        Alamofire.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                succeed!();
+            case .failure(let error):
+                print(error)
+                fail;
+            }
+        }
+    }
+    
     static func test(environment : Environment,
                      miniGenieMacAddress : String,
                      success : (String) -> Void,

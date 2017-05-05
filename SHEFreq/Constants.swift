@@ -33,15 +33,17 @@ let defaultProdFullScreenEnviromentName : String = "STB & Prod & Minidock bypass
 let defaultDevEnviromentName : String = "STB & Dev"
 let defaultQAEnviromentName : String = "STB & QA"
 let defaultLocalEnviromentName : String = "STB & Local"
+let defaultClearSessionName : String = "Clear Session"
 
 let prodServerUrl : String = "http://prd-freq-att-stb.frequency.com:4006/"
 let devServerUrl : String = "http://dev-freq-att-stb.frequency.com:4006/"
 let qaServerUrl : String = "http://qa-freq-att-stb.frequency.com:4006/"
-let localServerUrl : String = defaultIPAdress
+let localServerUrl : String = "http://192.168.1.1:4006/"
 
 let defaultIPAdress : String = "http://192.168.1.1:8080/"
 let defaultMiniGenieMacAddress : String = "a1:b2:c3:d4:e5"
 let defaultAppUrl: String = "apps/freq/minidock.html"
+let defaultClearSessionUrl: String = "apps/freq/clear-session.html"
 let fullscreenAppUrl: String = "apps/freq/mfw-home.html?tms_id=EP014328710087&rating=TV-G&returnURL=minidock.html"
 
 let defaultProdEnvironment : [String : String] = [
@@ -84,6 +86,14 @@ let defaultLocalEnvironment : [String : String] = [
     kMiniGenieAddr : defaultMiniGenieMacAddress,
 ]
 
+let defaultClearSession : [String : String] = [
+    kName : defaultClearSessionName,
+    kServerIP : localServerUrl,
+    kStbIP : defaultIPAdress,
+    kAppUrl : defaultClearSessionUrl,
+    kMiniGenieAddr : defaultMiniGenieMacAddress,
+]
+
 let defaultNewEnvironment : [String : String] = [
     kName : defaultEnviromentName,
     kServerIP : prodServerUrl,
@@ -92,6 +102,12 @@ let defaultNewEnvironment : [String : String] = [
     kMiniGenieAddr : defaultMiniGenieMacAddress,
 ]
 
-let defaultEnvironments = [defaultProdFullScreenEnvironment, defaultProdEnvironment, defaultDevEnvironment,defaultQAEnvironment,defaultLocalEnvironment]
+let defaultEnvironments = [
+    defaultProdFullScreenEnvironment,
+    defaultProdEnvironment,
+    defaultDevEnvironment,
+    defaultQAEnvironment,
+    defaultLocalEnvironment
+]
 
 

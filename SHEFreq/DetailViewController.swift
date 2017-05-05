@@ -142,13 +142,33 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     @IBAction func stopClicked(_ sender: Any) {
         persistChanges()
         startPulse()
-        
         self.stopTimer()
         
         memoryUsageLabel.text = "NA"
         memoryUsageProgressView.setProgress(0, animated: true)
         
         SHEF.stop(environment: environment!,
+                   miniGenieMacAddress: miniGenieSwitch.isOn ? (environment?.miniGenieAddr!)! : "",
+                   success: {_ in
+                    self.session?.status = kStatusAvailable
+                    self.defaultBackground()
+        },
+                   failure: {(error : NSError) -> () in
+                    print(error)
+                    self.session?.status = kStatusUnavailable
+                    self.failureBackground()
+        })
+    }
+    
+    @IBAction func clearClicked(_ sender: Any) {
+        startPulse()
+        
+        self.stopTimer()
+        
+        memoryUsageLabel.text = "NA"
+        memoryUsageProgressView.setProgress(0, animated: true)
+        
+        SHEF.clear(environment: environment!,
                   miniGenieMacAddress: miniGenieSwitch.isOn ? (environment?.miniGenieAddr!)! : "",
                   success: {_ in
                     self.session?.status = kStatusAvailable
