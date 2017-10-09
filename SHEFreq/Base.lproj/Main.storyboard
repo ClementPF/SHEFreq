@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -15,7 +15,7 @@
         <scene sceneID="pY4-Hu-kfo">
             <objects>
                 <navigationController title="Master" id="RMx-3f-FxP" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="Pmd-2v-anx">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Pmd-2v-anx">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -39,7 +39,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPy-vM-Vqj">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPy-vM-Vqj">
                                 <rect key="frame" x="8" y="64" width="359" height="503"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r9p-DR-Iw0">
@@ -137,7 +137,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5kM-G7-iET">
                                         <rect key="frame" x="8" y="184" width="343" height="80"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STB ADDRESS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="toA-NT-qa9">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STB ADDRESS - OLD BUILD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="toA-NT-qa9">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="26"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -152,13 +152,18 @@
                                                     <outlet property="delegate" destination="JEX-9P-axG" id="8MO-8p-fnu"/>
                                                 </connections>
                                             </textField>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="E78-Sw-fXl">
+                                                <rect key="frame" x="294" y="-3" width="51" height="31"/>
+                                            </switch>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="toA-NT-qa9" firstAttribute="top" secondItem="5kM-G7-iET" secondAttribute="top" id="5Bf-3T-5R0"/>
+                                            <constraint firstItem="E78-Sw-fXl" firstAttribute="centerY" secondItem="toA-NT-qa9" secondAttribute="centerY" id="6KM-KQ-iq9"/>
                                             <constraint firstItem="V26-v5-lZt" firstAttribute="top" secondItem="toA-NT-qa9" secondAttribute="bottom" constant="16" id="9TZ-VI-fxb"/>
                                             <constraint firstItem="toA-NT-qa9" firstAttribute="leading" secondItem="V26-v5-lZt" secondAttribute="leading" id="Jzc-gs-O1v"/>
                                             <constraint firstItem="toA-NT-qa9" firstAttribute="leading" secondItem="5kM-G7-iET" secondAttribute="leading" id="Mia-p1-OjP"/>
+                                            <constraint firstAttribute="trailing" secondItem="E78-Sw-fXl" secondAttribute="trailing" id="O4G-xI-W59"/>
                                             <constraint firstItem="toA-NT-qa9" firstAttribute="trailing" secondItem="V26-v5-lZt" secondAttribute="trailing" constant="24" id="r7n-ZP-Pl7"/>
                                             <constraint firstItem="toA-NT-qa9" firstAttribute="trailing" secondItem="5kM-G7-iET" secondAttribute="trailingMargin" id="zEt-SN-A2s"/>
                                             <constraint firstAttribute="height" constant="80" id="zFz-PS-mNv"/>
@@ -214,6 +219,7 @@
                                     <constraint firstItem="5E0-Xv-aLU" firstAttribute="top" secondItem="r9p-DR-Iw0" secondAttribute="bottom" constant="8" symbolic="YES" id="SLj-ew-m09"/>
                                     <constraint firstItem="5kM-G7-iET" firstAttribute="top" secondItem="5E0-Xv-aLU" secondAttribute="bottom" constant="8" symbolic="YES" id="bGH-ts-WWs"/>
                                     <constraint firstItem="kdh-QK-3n0" firstAttribute="top" secondItem="VJq-4C-CIg" secondAttribute="bottom" constant="7" id="bPs-YM-9f0"/>
+                                    <constraint firstAttribute="bottom" secondItem="kdh-QK-3n0" secondAttribute="bottom" constant="24" id="fMv-nD-uiP"/>
                                     <constraint firstItem="VJq-4C-CIg" firstAttribute="top" secondItem="5kM-G7-iET" secondAttribute="bottom" constant="8" symbolic="YES" id="g7X-ZL-Usv"/>
                                     <constraint firstItem="5kM-G7-iET" firstAttribute="leading" secondItem="VJq-4C-CIg" secondAttribute="leading" id="ipW-Le-O4h"/>
                                     <constraint firstItem="VJq-4C-CIg" firstAttribute="leading" secondItem="kdh-QK-3n0" secondAttribute="leading" id="q0L-zK-8q8"/>
@@ -278,8 +284,8 @@
                                     <progressView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4uh-Me-zcY">
                                         <rect key="frame" x="68" y="0.0" width="243" height="2"/>
                                     </progressView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="NA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEM-a2-4WH">
-                                        <rect key="frame" x="-9" y="-9" width="69" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEM-a2-4WH">
+                                        <rect key="frame" x="36" y="-9" width="24" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -322,6 +328,7 @@
                         <outlet property="miniGenieAddr" destination="DJK-HK-eSB" id="cue-ah-l44"/>
                         <outlet property="miniGenieSwitch" destination="648-16-Gij" id="3T7-Tq-sVm"/>
                         <outlet property="nameTextField" destination="yRv-en-QuQ" id="Lqt-D3-75T"/>
+                        <outlet property="oldSHEFSwitch" destination="E78-Sw-fXl" id="IdG-VJ-vdy"/>
                         <outlet property="serverIPTextField" destination="qbK-0m-6PF" id="eNb-dM-ADa"/>
                         <outlet property="stbIPTextField" destination="V26-v5-lZt" id="Wht-y1-E49"/>
                     </connections>
@@ -361,7 +368,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Arm-wq-HPj">
-                                            <rect key="frame" x="15" y="12" width="33.5" height="20.5"/>
+                                            <rect key="frame" x="16" y="12" width="33.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -411,7 +418,7 @@
         <scene sceneID="r7l-gg-dq7">
             <objects>
                 <navigationController id="vC3-pB-5Vb" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="DjV-YW-jjY">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DjV-YW-jjY">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

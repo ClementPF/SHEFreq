@@ -23,6 +23,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     @IBOutlet var memoryUsageProgressView: UIProgressView!
     @IBOutlet var memoryUsageLabel: UILabel!
     @IBOutlet var miniGenieSwitch: UISwitch!
+    @IBOutlet var oldSHEFSwitch: UISwitch!
     
     weak var timer: Timer?
     
@@ -57,6 +58,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
             }
             if let label = self.miniGenieAddr {
                 label.text = environment.miniGenieAddr
+            }
+            if let oldSHEF = self.oldSHEFSwitch{
+                oldSHEF.setOn(!environment.isNewSHEF, animated: false)
             }
         }
         if let session = self.session{
@@ -99,8 +103,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         environment?.name = nameTextField.text
         environment?.stbIP = stbIPTextField.text
         environment?.miniGenieAddr = miniGenieAddr.text
+        environment?.isNewSHEF = !oldSHEFSwitch.isOn
         
         session?.isMiniGenie = miniGenieSwitch.isOn
+        
         
         do {
             try managedObjectContext?.save()

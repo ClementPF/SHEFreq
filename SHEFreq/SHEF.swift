@@ -18,13 +18,12 @@ class SHEF{
         
         let appPath = (environment.appUrl!).addingPercentEncoding(withAllowedCharacters: .nonBaseCharacters)
         
-        var url = String(format: "%@itv/startURL?url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!)
-        
+        var url = environment.isNewSHEF ?
+        String(format: "%@itv/app?action=start&url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!) :
+            String(format: "%@itv/startURL?url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!)
+
         if(miniGenieMacAddress.characters.count > 0){
-            var macAdrr = miniGenieMacAddress
-            macAdrr = macAdrr.uppercased()
-            macAdrr = macAdrr.replacingOccurrences(of: ":", with: "", options: NSString.CompareOptions.literal, range:nil)
-            url = String(format: "%@?&clientAddr=%@", url, macAdrr )
+            url = String(format: "%@&clientAddr=%@", url, self.formatMacAddress(macAdrr: miniGenieMacAddress))
         }
         
         Alamofire.request(url).validate().responseJSON { response in
@@ -45,13 +44,10 @@ class SHEF{
         
         let appPath = (defaultClearSessionUrl).addingPercentEncoding(withAllowedCharacters: .nonBaseCharacters)
         
-        var url = String(format: "%@itv/startURL?url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!)
+        var url = environment.isNewSHEF ? String(format: "%@itv/app?action=start&url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!) : String(format: "%@itv/startURL?url=%@%@", (environment.stbIP!), (environment.serverIP!), appPath!)
         
         if(miniGenieMacAddress.characters.count > 0){
-            var macAdrr = miniGenieMacAddress
-            macAdrr = macAdrr.uppercased()
-            macAdrr = macAdrr.replacingOccurrences(of: ":", with: "", options: NSString.CompareOptions.literal, range:nil)
-            url = String(format: "%@?&clientAddr=%@", url, macAdrr )
+            url = String(format: "%@&clientAddr=%@", url, self.formatMacAddress(macAdrr: miniGenieMacAddress))
         }
         
         Alamofire.request(url).validate().responseJSON { response in
@@ -96,13 +92,11 @@ class SHEF{
                      success : @escaping (String) -> Void,
                      failure : (NSError) -> Void){
         
-        var url = String(format: "%@itv/stopITV", (environment.stbIP)!)
+        var url = environment.isNewSHEF ? String(format: "%@itv/app?action=stop", (environment.stbIP)!) :
+         String(format: "%@itv/stopITV", (environment.stbIP)!)
         
         if(miniGenieMacAddress.characters.count > 0){
-            var macAdrr = miniGenieMacAddress
-            macAdrr = macAdrr.uppercased()
-            
-            url = String(format: "%@?&clientAddr=%@", url, macAdrr )
+            url = String(format: "%@&clientAddr=%@", url, self.formatMacAddress(macAdrr: miniGenieMacAddress))
         }
         
         Alamofire.request(url).validate().responseJSON { response in
@@ -124,10 +118,7 @@ class SHEF{
         var url = String(format: "%@itv/getLogs", (environment.stbIP)!)
         
         if(miniGenieMacAddress.characters.count > 0){
-            var macAdrr = miniGenieMacAddress
-            macAdrr = macAdrr.uppercased()
-            
-            url = String(format: "%@?&clientAddr=%@", url, macAdrr )
+            url = String(format: "%@?&clientAddr=%@", url, self.formatMacAddress(macAdrr: miniGenieMacAddress))
         }
         
         Alamofire.request(url, method: .get, encoding: JSONEncoding.default).validate().responseString
@@ -189,5 +180,11 @@ class SHEF{
         
         let currentMemory = Int(text.substring(with: range2))
         return currentMemory!;
+    }
+    
+    static func formatMacAddress(macAdrr: String) -> String{
+        var address = macAdrr.uppercased()
+        address = address.replacingOccurrences(of: ":", with: "", options: NSString.CompareOptions.literal, range:nil)
+        return address;
     }
 }
